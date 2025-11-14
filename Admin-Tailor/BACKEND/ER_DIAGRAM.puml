@@ -1,0 +1,122 @@
+@startuml ER_Diagram
+!theme plain
+skinparam linetype ortho
+skinparam packageStyle rectangle
+
+entity "users" as users {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR
+  * email : VARCHAR <<UNIQUE>>
+  * phone : VARCHAR
+  * address : VARCHAR
+  * password : VARCHAR
+  * profile_image : VARCHAR <<nullable>>
+  * remember_token : VARCHAR <<nullable>>
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "admins" as admins {
+  * id : BIGINT <<PK>>
+  --
+  * fullname : VARCHAR <<UNIQUE>>
+  * email : VARCHAR <<UNIQUE>>
+  * password : VARCHAR
+  * phone : VARCHAR <<nullable>>
+  * address : VARCHAR <<nullable>>
+  * profile_image : VARCHAR <<nullable>>
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "appointments" as appointments {
+  * id : BIGINT <<PK>>
+  --
+  * user_id : BIGINT <<FK>>
+  * service_type : VARCHAR
+  * sizes : JSON
+  * total_quantity : INTEGER
+  * notes : TEXT <<nullable>>
+  * design_image : VARCHAR <<nullable>>
+  * gcash_proof : VARCHAR
+  * refund_image : VARCHAR <<nullable>>
+  * preferred_due_date : DATE
+  * appointment_date : DATE
+  * appointment_time : TIME
+  * status : VARCHAR <<default:'pending'>>
+  * state : VARCHAR <<default:'active'>>
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "orders" as orders {
+  * id : BIGINT <<PK>>
+  --
+  * appointment_id : BIGINT <<FK>>
+  * queue_number : INTEGER <<nullable>>
+  * status : ENUM('Pending','Ready to Check','Completed','Finished','Cancelled') <<default:'Pending'>>
+  * handled : BOOLEAN <<default:false>>
+  * scheduled_at : DATETIME <<nullable>>
+  * completed_at : DATETIME <<nullable>>
+  * total_amount : DECIMAL(10,2) <<nullable>>
+  * check_appointment_date : DATE <<nullable>>
+  * check_appointment_time : TIME <<nullable>>
+  * pickup_appointment_date : DATE <<nullable>>
+  * pickup_appointment_time : TIME <<nullable>>
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "feedback" as feedback {
+  * id : BIGINT <<PK>>
+  --
+  * order_id : BIGINT <<FK>>
+  * user_id : BIGINT <<FK>>
+  * rating : TINYINT <<1-5>>
+  * comment : TEXT <<nullable>>
+  * admin_response : TEXT <<nullable>>
+  * admin_checked : BOOLEAN <<default:false>>
+  * responded_at : TIMESTAMP <<nullable>>
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "notifications" as notifications {
+  * id : BIGINT <<PK>>
+  --
+  * user_id : BIGINT <<FK>>
+  * type : VARCHAR
+  * title : VARCHAR
+  * body : TEXT <<nullable>>
+  * data : JSON <<nullable>>
+  * read_at : TIMESTAMP <<nullable>>
+  * is_viewed : BOOLEAN <<default:false>>
+  * viewed_at : TIMESTAMP <<nullable>>
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+entity "service_types" as service_types {
+  * id : BIGINT <<PK>>
+  --
+  * name : VARCHAR <<UNIQUE>>
+  * downpayment_amount : DECIMAL(10,2)
+  * created_at : TIMESTAMP
+  * updated_at : TIMESTAMP
+}
+
+' Relationships
+users ||--o{ appointments : "has many"
+users ||--o{ notifications : "has many"
+users ||--o{ feedback : "has many"
+
+appointments ||--o| orders : "has one"
+orders ||--o| feedback : "has one"
+
+' Unique constraints
+feedback }o--|| orders : "belongs to"
+feedback }o--|| users : "belongs to"
+
+@enduml
+

@@ -1,0 +1,246 @@
+/* Pastel Header Styles */
+:root {
+  --primary-gradient: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 50%, #81d4fa 100%);
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(59, 130, 246, 0.2);
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --accent-color: #3b82f6;
+  --shadow-glow: 0 4px 20px rgba(59, 130, 246, 0.15);
+  --shadow-strong: 0 8px 30px rgba(59, 130, 246, 0.25);
+}
+
+/* Reserve space for the fixed header within admin layout only */
+.main-content {
+  padding-top: clamp(50px, 8vh, 60px);
+}
+
+.header {
+  margin-top: 10px;
+  background: transparent;
+  backdrop-filter: none;
+  border-bottom: none;
+  padding: 0 clamp(10px, 2vw, 20px);
+  height: clamp(50px, 8vh, 60px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: none;
+  position: fixed;
+  top: 0;
+  left: clamp(-2px, 1vw, -1px); /* Start after sidebar */
+  right: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  margin-left: clamp(245px, 16.5vw, 245px); /* Push title to the right to avoid sidebar overlap */
+}
+
+.header-title {
+  margin: 0;
+  font-size: 202px !important; /* Fixed smaller size (half of original), independent of other elements */
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #000000 !important; /* Pure black, independent color - not following other colors - using !important to override Welcome.css */
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 50;
+}
+
+/* More specific selector to override Welcome.css .header h1 and App.css h1 */
+.header .header-title,
+.header-left .header-title,
+.header h1.header-title {
+  color: #000000 !important;
+  font-size: 30px !important;
+  font-weight: 550 !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2vw, 15px);
+  position: relative;
+  z-index: 50;
+}
+
+.profile-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.profile-picture {
+  width: clamp(32px, 5vw, 40px);
+  height: clamp(32px, 5vw, 40px);
+  border-radius: 50%;
+  background: var(--accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-color);
+  font-size: clamp(14px, 2.5vw, 18px);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid var(--glass-border);
+  box-shadow: var(--shadow-glow);
+  outline: none;
+  position: relative;
+  z-index: 50;
+}
+
+.profile-picture:focus,
+.profile-picture:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-glow);
+}
+
+.notification-bell-button:focus,
+.notification-bell-button:focus-visible {
+  outline: none;
+  box-shadow: 0 4px 12px rgba(59,130,246,0.08);
+}
+
+.profile-picture:hover {
+  background: var(--accent-color);
+  color: white;
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: var(--shadow-strong);
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: scale(1.1) translateY(-2px);
+  }
+  50% {
+    transform: scale(1.15) translateY(-4px);
+  }
+}
+
+.notification-bell-button:hover {
+  transform: scale(1.15) rotate(10deg);
+  animation: bellRing 0.5s ease;
+}
+
+@keyframes bellRing {
+  0%, 100% {
+    transform: scale(1.15) rotate(10deg);
+  }
+  25% {
+    transform: scale(1.15) rotate(-10deg);
+  }
+  50% {
+    transform: scale(1.15) rotate(10deg);
+  }
+  75% {
+    transform: scale(1.15) rotate(-5deg);
+  }
+}
+
+.user-role {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: clamp(12px, 1.9vw, 15px);
+  letter-spacing: 0.01em;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  z-index: 50;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 10px;
+    height: 50px;
+    margin-left: 0;
+    position: fixed;
+    top: 0;
+    left: 0; /* Full width on mobile */
+    right: 0;
+    z-index: 100;
+  }
+  .main-content {
+    padding-top: 50px;
+  }
+  
+  .header-left {
+    margin-left: 0; /* Reset margin on mobile since sidebar is hidden */
+  }
+  
+  .header-right {
+    gap: 8px;
+  }
+  
+  .profile-picture {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+  
+  .user-role {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    padding: 0 8px;
+    height: 45px;
+  }
+  .main-content {
+    padding-top: 45px;
+  }
+  
+  .header-right {
+    gap: 6px;
+  }
+  
+  .profile-picture {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  
+  .user-role {
+    font-size: 11px;
+  }
+}
+
+/* Custom scrollbar for notifications */
+.notifications-scroll-container {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+.notifications-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.notifications-scroll-container::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.notifications-scroll-container::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.notifications-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+} 

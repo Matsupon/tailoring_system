@@ -1,0 +1,822 @@
+/* Shared Modal Base Styles (used across Orders, OrdersHistory, Dashboard, Appointments) */
+.modal-bg {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vh 16px;
+  z-index: 10000;
+}
+
+.modal-panel {
+  background: #fff;
+  border-radius: 12px;
+  width: min(900px, 205vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  /* Center relative to main content (ignore sidebar width) */
+  transform: translateX(calc(clamp(200px, 20vw, 250px) / 2));
+}
+
+.details-modal {
+  padding: 24px;
+}
+
+/* Modal header layout: title centered, X on the right */
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  position: relative;
+}
+.modal-header .left-spacer,
+.modal-header .right-spacer { width: 28px; height: 28px; }
+.modal-header h2 { 
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0; 
+  font-weight: 800; 
+  color: #1f2937; 
+  text-align: center;
+}
+.modal-header .exit-btn { 
+  width: 28px; 
+  height: 28px; 
+  display: grid; 
+  place-items: center; 
+  cursor: pointer; 
+  color: #6b7280; 
+  transition: transform 0.15s ease; 
+  margin-left: auto;
+}
+.modal-header .exit-btn:hover { transform: scale(1.1); color: #111827; }
+
+/* Image Zoom Modal */
+.image-modal-bg {
+  position: fixed;
+  top: 0;
+  /* exclude the sidebar from being covered */
+  left: clamp(200px, 20vw, 250px);
+  width: calc(100% - clamp(200px, 20vw, 250px));
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vh 16px;
+  z-index: 10000;
+}
+.image-modal-panel {
+  background: #fff;
+  border-radius: 12px;
+  width: min(600px, 96vw);
+  max-height: 80vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  padding: 20px;
+  /* Center relative to main content (ignore sidebar width) */
+  transform: translateX(calc(clamp(200px, 20vw, 250px) / 2));
+}
+
+@media (max-width: 768px) {
+  .orders-calendar-modal-bg,
+  .image-modal-bg,
+  .dashboard-modal-bg {
+    left: 0;
+    width: 100%;
+  }
+}
+
+/* Dashboard modal styles (matching Customers modal) - MUST COVER EVERYTHING */
+.dashboard-modal-bg {
+  position: fixed !important;
+  top: 0 !important;
+  /* exclude the sidebar from being covered */
+  left: clamp(200px, 20vw, 250px) !important;
+  width: calc(100% - clamp(200px, 20vw, 250px)) !important;
+  height: 100vh !important;
+  background: rgba(128, 128, 128, 0.5) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  z-index: 20000 !important; /* Very high to cover search bar, filters, buttons, dropdowns */
+}
+.dashboard-modal-panel {
+  background: white;
+  border-radius: 10px;
+  padding: 20px 28px 24px 28px; /* Reduced top padding to align title with X icon */
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  position: relative;
+  text-align: left;
+  max-height: 90vh;
+  overflow-y: auto;
+  /* Center within overlay (overlay already excludes sidebar) */
+  transform: none;
+  /* Hide scrollbar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+.dashboard-modal-panel::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+.dashboard-modal-title {
+  text-align: center;
+  margin-bottom: 18px;
+  margin-top: 0;
+  padding-top: 0;
+  color: #000;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 28px; /* Match X icon height alignment */
+}
+.dashboard-modal-exit-icon {
+  position: absolute;
+  top: 20px; /* Aligned with padding-top */
+  right: 20px;
+  font-size: 1.5rem;
+  color: #444;
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.2s ease;
+}
+.dashboard-modal-exit-icon:hover {
+  transform: scale(1.2);
+}
+.dashboard-modal-image { width: 100%; max-width: 200px; height: 120px; border-radius: 4px; background: #f0f0f0; object-fit: cover; cursor: pointer; }
+
+/* Animations */
+@keyframes modalFadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes modalFadeOut { from { opacity: 1; } to { opacity: 0; } }
+@keyframes modalPopIn { 0% { opacity: 0; transform: translateY(10px) scale(0.96); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes modalPopOut { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(6px) scale(0.96); } }
+
+.modal-bg.animate-fade { animation: modalFadeIn 180ms ease-out forwards; }
+.modal-bg.animate-fade.closing { animation: modalFadeOut 160ms ease-in forwards; }
+.modal-panel.animate-pop { animation: modalPopIn 200ms ease-out forwards; }
+.modal-panel.animate-pop.closing { animation: modalPopOut 160ms ease-in forwards; }
+
+/* Utility for details columns */
+.details-container { display: flex; gap: 30px; }
+.details-left, .details-right { 
+  flex: 1; 
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.detail-group {
+  margin-bottom: 8px;
+}
+.detail-label { 
+  font-weight: 600; 
+  color: #555; 
+  margin-bottom: 2px; 
+  font-size: 14px; 
+  letter-spacing: 0; 
+  text-transform: none; 
+}
+.detail-value { 
+  color: #333; 
+  font-size: 15px; 
+  font-weight: 400; 
+  line-height: 1.4; 
+  margin-bottom: 0; 
+}
+.image-label {
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 4px;
+  margin-top: 8px;
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: none;
+}
+.dashboard-modal-image { 
+  width: 100%; 
+  max-width: 200px; 
+  max-height: 140px; 
+  border-radius: 4px; 
+  background: #f0f0f0; 
+  object-fit: contain; 
+  cursor: pointer; 
+  border: 1px solid #e5e7eb;
+  padding: 10px;
+  margin-bottom: 0;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.dashboard-modal-image:hover {
+  transform: scale(1.04);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+}
+.modal-image { 
+  width: 100%; 
+  max-width: 200px; 
+  max-height: 140px; 
+  object-fit: contain; 
+  border: 1px solid #e5e7eb; 
+  border-radius: 10px; 
+  padding: 10px; 
+  cursor: pointer; 
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  margin-bottom: 12px;
+}
+.modal-image:hover { 
+  transform: scale(1.04); 
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12); 
+}
+
+@media (max-width: 768px) {
+  .details-container { flex-direction: column; }
+  .details-modal { padding: 1px; }
+}
+
+/* Orders Calendar Modal - Centered and styled - MUST COVER EVERYTHING */
+.orders-calendar-modal-bg {
+  position: fixed !important;
+  top: 0 !important;
+  /* exclude the sidebar from being covered */
+  left: clamp(200px, 20vw, 250px) !important;
+  width: calc(100% - clamp(200px, 20vw, 250px)) !important;
+  height: 100% !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 4vh 16px !important;
+  z-index: 20000 !important; /* Very high to cover search bar, filters, buttons, dropdowns */
+}
+
+.orders-calendar-modal-panel {
+  background: #fff;
+  border-radius: 12px;
+  width: min(760px, 96vw);
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  padding: 20px;
+  /* Centering handled by flex on the backdrop; no additional translate needed */
+}
+
+.orders-calendar-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.orders-calendar-modal-exit {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.orders-calendar-section { display: flex; flex-direction: column; gap: 12px; }
+.orders-calendar-header { display: flex; align-items: center; justify-content: space-between; }
+.orders-nav-btn { background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+
+.orders-calendar-grid { border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; }
+.orders-calendar-days { display: grid; grid-template-columns: repeat(7, 1fr); background: #f9fafb; font-weight: 600; font-size: 12px; }
+.orders-calendar-days span { padding: 6px 4px; text-align: center; }
+.orders-calendar-dates { display: grid; grid-template-columns: repeat(7, 1fr); }
+.orders-calendar-date { padding: 8px 4px; text-align: center; border-right: 1px solid #eee; border-bottom: 1px solid #eee; min-height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; background: #fff; }
+.orders-calendar-date.empty { background: transparent; cursor: default; }
+.orders-calendar-date.today { background: #eef2ff; font-weight: 700; color: #1d4ed8; }
+.orders-calendar-date.past { color: #9ca3af; background: #fafafa; pointer-events: none; }
+.orders-calendar-date.selected { outline: 2px solid #3b82f6; outline-offset: -2px; }
+.orders-date-number { font-weight: 600; font-size: 12px; }
+
+.orders-time-picker-section { display: flex; align-items: center; gap: 8px; margin: 12px 0; }
+.orders-time-picker-input { padding: 6px 10px; border-radius: 6px; border: 1px solid #e5e7eb; }
+.orders-set-date-btn { background: #3b82f6; color: #fff; border: none; border-radius: 8px; padding: 10px 16px; cursor: pointer; width: 100%; font-weight: 600; }
+.orders-set-date-btn:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+/* Dropdown items styling */
+.dropdown-item { padding: 8px 12px; font-size: 14px; cursor: pointer; white-space: nowrap; text-align: center; font-weight: 500; }
+.dropdown-item:hover { background: #f3f4f6; }
+
+/* Color-coded dropdown items based on status */
+.dropdown-item:nth-child(1) { color: #7a5f00; } /* Pending - yellow */
+.dropdown-item:nth-child(2) { color: #b23c17; } /* Ready to Check - orange */
+.dropdown-item:nth-child(3) { color: #2e7d32; } /* Completed - green */
+.dropdown-item:nth-child(4) { color: #1565c0; } /* Finished - blue */
+
+/* Orders Content - scrolling container */
+.orders-content {
+  padding: 8px 8px;
+  max-width: 100%;
+  margin: 0 0 20px 0; /* Bottom margin to prevent content from reaching bottom */
+  height: calc(100vh - 50px) !important; /* Extended to just above pagination (header ~60px + margin ~20px) */
+  min-height: calc(100vh - 50px) !important; /* Force minimum height */
+  overflow: hidden !important; /* Prevent page scrolling - only table containers scroll */
+  padding-bottom: 20px; /* Reduced space for pagination panel */
+}
+
+/* FORCE THE ENTIRE CONTAINER TO BE TALLER - OVERRIDE EVERYTHING */
+.feedback-card-container {
+  min-height: calc(100vh - 120px) !important;
+  max-height: calc(100vh - 120px) !important;
+  height: calc(100vh - 120px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 1 auto !important;
+  overflow: visible !important;
+}
+
+/* Ensure dropdown can overflow the table container */
+.table-scroll-container {
+  position: relative;
+}
+
+/* Make sure table cells and rows allow dropdown to overflow */
+.orders-content td {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+.orders-content tr {
+  position: relative !important;
+  overflow: visible !important;
+}
+
+/* Make sure the update button container allows dropdown to overflow */
+.orders-content div[style*="position: relative"] {
+  overflow: visible !important;
+  z-index: 1 !important; /* Create stacking context but keep it low */
+}
+
+/* Update button - MUST be lower than dropdown */
+.orders-content .update-btn,
+.update-btn {
+  position: relative !important;
+  z-index: 1 !important; /* Low z-index - dropdown will be above */
+}
+
+/* Dropdown items styling with high z-index */
+.dropdown-item {
+  z-index: 99999 !important;
+}
+
+/* Ensure dropdown appears BELOW button - centered and above other elements */
+.orders-content .update-dropdown,
+.update-dropdown { 
+  position: fixed !important; /* Use fixed positioning to escape scroll clipping */
+  background: #fff !important; 
+  border: 1px solid #e5e7eb !important; 
+  border-radius: 8px !important; 
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12) !important; 
+  overflow: visible !important; 
+  z-index: 99999 !important; /* VERY HIGH z-index - above everything except modals */
+  white-space: nowrap !important;
+  pointer-events: auto !important; /* Ensure dropdown is clickable */
+  min-width: 140px !important;
+  width: auto !important;
+}
+
+/* Filter dropdown styling - ensure it displays properly and overlays content */
+.filter-dropdown {
+  position: fixed !important;
+  background: #fff !important; 
+  border: 1px solid #e5e7eb !important; 
+  border-radius: 8px !important; 
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12) !important; 
+  overflow: visible !important; 
+  z-index: 99999 !important; /* VERY HIGH z-index - above everything except modals */
+  white-space: nowrap !important;
+  pointer-events: auto !important; /* Ensure dropdown is clickable */
+  min-width: 220px !important;
+  width: auto !important;
+}
+
+/* Search and Filter Section - Lower z-index so modals can cover them */
+.orders-content input[type="text"],
+.orders-content button {
+  position: relative !important;
+  z-index: 100 !important; /* Low z-index so calendar modal can cover */
+}
+
+/* Filter dropdown should NOT be included in the above rule - it has its own high z-index */
+
+/* Orders Table Styling */
+.orders-content table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto !important; /* Allow columns to adjust based on content */
+}
+
+/* Table width for Orders.jsx page - adjusts to container */
+.orders-page-content table {
+  max-width: 100% !important;
+  width: 100% !important;
+  table-layout: auto !important; /* Responsive column widths */
+}
+
+/* Make table columns responsive - text wraps to fit width */
+.orders-page-content table th,
+.orders-page-content table td {
+  white-space: normal !important; /* Allow text wrapping */
+  word-wrap: break-word !important; /* Break long words if needed */
+  word-break: break-word !important; /* Break words to fit */
+  overflow-wrap: break-word !important; /* Modern word wrapping */
+  padding: 10px 8px !important; /* Better padding for readability */
+  font-size: 14px !important; /* Readable font size */
+  line-height: 1.4 !important; /* Better line height for wrapped text */
+  vertical-align: middle !important; /* Center content vertically */
+}
+
+/* Make status badges fit in narrow columns */
+.orders-page-content table td span[style*="border-radius: 9999px"] {
+  font-size: 12px !important;
+  padding: 4px 10px !important;
+  display: inline-block !important;
+  white-space: nowrap !important; /* Prevent status text from wrapping */
+}
+
+/* Make buttons in table fit better */
+.orders-page-content table td button {
+  font-size: 13px !important;
+  padding: 7px 12px !important;
+  white-space: nowrap !important;
+}
+
+/* Make action links fit better */
+.orders-page-content table td .action-link {
+  font-size: 13px !important;
+  word-break: normal !important;
+  white-space: nowrap !important;
+}
+
+/* Table headers should wrap too */
+.orders-page-content table th {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.3 !important;
+}
+
+/* Make status column content stack vertically */
+.orders-page-content table td > div {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Smaller fee text in status column */
+.orders-page-content table td span[style*="fontSize: '12px'"] {
+  font-size: 11px !important;
+  display: block !important;
+  margin-left: 0 !important;
+  text-align: center !important;
+  white-space: normal !important; /* Allow fee text to wrap within the wider column */
+  word-break: break-word !important;
+}
+
+.orders-content th,
+.orders-content td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+ .orders-content th {
+  font-weight: 600;
+  color: #1f2937;
+  font-size: 14px;
+  background: #e8f4fd;
+  position: sticky;
+  top: 0;
+  /* Keep header above table rows but below header notifications */
+  z-index: 50;
+}
+
+.orders-content td {
+  color: #374151;
+  font-size: 14px;
+  font-weight: 400;
+  position: relative;
+  z-index: 1;
+}
+
+/* Ensure checkbox buttons in table cells stay below the header */
+.orders-content td button {
+  position: relative;
+  z-index: 1;
+}
+
+.orders-content tr:last-child td {
+  border-bottom: none;
+}
+
+/* Success popups - centered relative to content area (ignore sidebar) */
+.orders-calendar-success-popup,
+.popup-success {
+  position: fixed;
+  /* center within the content area excluding the sidebar */
+  left: calc(clamp(200px, 20vw, 250px) + (100% - clamp(200px, 20vw, 250px)) / 2);
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+  padding: 10px 16px;
+  z-index: 10001;
+}
+
+/* Pagination Panel Styles */
+.pagination-panel {
+  position: fixed;
+  bottom: 8px;
+  left: clamp(200px, 20vw, 250px);
+  right: 8px;
+  background: transparent;
+  z-index: 100;
+  padding: 0 8px;
+}
+
+.pagination-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 0 auto;
+  width: fit-content;
+  padding: 10px 16px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+}
+
+.pagination-btn {
+  padding: 8px 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  color: #374151;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #eef2ff;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+}
+
+.pagination-btn:disabled {
+  background: #f3f4f6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.pagination-btn.active {
+  background: #4f46e5;
+  color: white;
+  border-color: #4f46e5;
+  font-weight: 600;
+}
+
+.pagination-btn.active:hover {
+  background: #4338ca;
+  border-color: #4338ca;
+}
+
+.pagination-meta { white-space: nowrap; }
+
+/* Table scrollbar styles - always visible */
+.table-scroll-container {
+  max-height: none !important; /* Remove max-height constraint */
+  min-height: calc(100vh - 250px) !important; /* Force minimum height to be tall */
+  height: auto !important; /* Let it grow to fill parent */
+  flex: 1 1 auto !important; /* Fill available space in flex container */
+  overflow-y: scroll !important; /* Always show vertical scrollbar */
+  overflow-x: auto !important; /* Allow horizontal scroll if needed */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.5) rgba(0, 0, 0, 0.1);
+  padding-bottom: 200px !important; /* Big padding at bottom so Update dropdown is visible when scrolling */
+  padding-right: 4px; /* Minimal right padding */
+  padding-left: 0; /* No left padding */
+  border-radius: 0 0 16px 16px; /* Rounded bottom corners */
+  position: relative !important;
+  display: block !important;
+}
+
+.table-scroll-container::-webkit-scrollbar {
+  display: block;
+  width: 8px;
+  height: 8px;
+}
+
+.table-scroll-container::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.table-scroll-container::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.5);
+  border-radius: 4px;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.table-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.7);
+}
+
+/* Horizontal scrollbar corner */
+.table-scroll-container::-webkit-scrollbar-corner {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.table-scroll-container.with-pagination {
+  max-height: none !important; /* Remove max-height constraint */
+  min-height: calc(100vh - 250px) !important; /* Force minimum height */
+  height: auto !important; /* Let it grow to fill parent */
+  flex: 1 1 auto !important; /* Fill available space in flex container */
+  overflow-y: scroll !important; /* Always show vertical scrollbar */
+  overflow-x: auto !important; /* Allow horizontal scroll if needed */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(59, 130, 246, 0.5) rgba(0, 0, 0, 0.1);
+  padding-bottom: 200px !important; /* Big padding at bottom so Update dropdown is visible when scrolling */
+  padding-right: 4px; /* Minimal right padding */
+  padding-left: 0; /* No left padding */
+}
+
+/* Scrollbar styles are inherited from base .table-scroll-container */
+
+
+/* Pagination modifier class no longer needed - scrollbar always visible */
+
+@media (max-width: 768px) {
+  .orders-content {
+    padding: 8px 0;
+  }
+  
+  .feedback-card-container:not(.orders-page-table-container) {
+    margin: 0 8px 10px 8px !important;
+    padding: 16px 16px 8px 16px !important;
+  }
+  
+  /* Search and Filter Section - responsive padding */
+  .orders-content > div:first-child {
+    margin: 0 8px 40px 8px !important;
+    margin-right: 12px !important;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .feedback-card-container:not(.orders-page-table-container) {
+    margin: 0 8px 40px 8px !important;
+    margin-right: 12px !important;
+  }
+  
+  .orders-content > div:first-child > div:first-child {
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+  
+  .table-scroll-container {
+    min-height: calc(100vh - 200px) !important;
+    padding-bottom: 200px !important; /* Big padding on mobile too so Update dropdown is visible */
+    overflow-x: auto !important; /* Allow horizontal scroll on mobile */
+  }
+  
+  .table-scroll-container.with-pagination {
+    min-height: calc(100vh - 200px) !important;
+    padding-bottom: 200px !important; /* Big padding on mobile too so Update dropdown is visible */
+    overflow-x: auto !important; /* Allow horizontal scroll on mobile */
+  }
+  
+  .pagination-panel {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    padding: 0;
+  }
+  
+  .pagination-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+  
+  /* Make table responsive */
+  .orders-content table {
+    font-size: 13px;
+  }
+  
+  .orders-content th,
+  .orders-content td {
+    padding: 8px 6px;
+  }
+  
+  /* Ensure text wrapping on mobile too */
+  .orders-page-content table th,
+  .orders-page-content table td {
+    font-size: 13px !important;
+    padding: 8px 6px !important;
+  }
+}
+
+/* Unique styles for Orders.jsx page only - Align with header right margin */
+/* Header has padding: 0 clamp(10px, 2vw, 20px), so we match the right padding */
+.orders-page-unique {
+  margin-bottom: 80px !important; /* Big bottom margin for entire page */
+}
+
+.orders-page-content {
+  margin-right: clamp(10px, 2vw, 20px) !important; /* Match header right padding */
+  margin-bottom: 80px !important; /* Big bottom margin for content */
+}
+
+/* Margins for search filter handled in inline styles - equal 16px on both sides */
+
+.feedback-card-container.orders-page-table-container,
+.orders-page-table-container {
+  /* Margins handled in inline styles - equal 16px on both sides */
+  overflow-x: auto !important; /* Allow horizontal scroll if needed */
+  box-sizing: border-box !important; /* Ensure padding is included in width */
+}
+
+/* OrdersHistory page specific styles - allow full page scrolling */
+.orders-history-page {
+  overflow-y: auto !important; /* Allow vertical scrolling for the entire page */
+  overflow-x: hidden !important;
+  height: 100vh !important;
+}
+
+.orders-history-content {
+  overflow: visible !important; /* Override the hidden overflow */
+  height: auto !important; /* Allow natural height */
+  min-height: 100vh !important;
+  padding-bottom: 80px !important; /* Extra space at bottom for scrolling */
+}
+
+/* Override table container height for OrdersHistory only */
+.orders-history-page .feedback-card-container {
+  min-height: auto !important;
+  max-height: none !important;
+  height: auto !important;
+}
+
+/* Override table scroll container for OrdersHistory only */
+.orders-history-page .table-scroll-container,
+.orders-history-page .table-scroll-container.with-pagination {
+  min-height: auto !important;
+  max-height: none !important;
+  overflow-y: visible !important; /* No separate scrolling - use page scroll */
+  overflow-x: visible !important; /* Allow table to expand without horizontal scrollbar */
+  scrollbar-width: none !important;
+  padding-bottom: 20px !important; /* Reduced padding since page scrolls */
+}
+
+.orders-history-page .table-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .orders-page-unique {
+    margin-bottom: 60px !important; /* Smaller bottom margin on mobile */
+  }
+  
+  .orders-page-content {
+    margin-right: 10px !important; /* Match header mobile padding */
+    margin-bottom: 60px !important;
+  }
+  
+  .orders-page-search-filter {
+    margin: 0 8px 16px 8px !important; /* Equal margins on mobile */
+  }
+  
+  .feedback-card-container.orders-page-table-container,
+  .orders-page-table-container {
+    margin: 0 8px 40px 8px !important; /* Equal margins on mobile */
+    overflow-x: auto !important; /* Allow horizontal scroll on mobile */
+    box-sizing: border-box !important; /* Ensure padding is included in width */
+    padding: 16px 12px 8px 12px !important; /* Less padding on mobile */
+  }
+  
+  .orders-history-page {
+    overflow-y: auto !important;
+  }
+  
+  .orders-history-content {
+    padding-bottom: 60px !important;
+  }
+}

@@ -1,0 +1,16 @@
+.profile-page .page-title {
+  margin-left: -20px;
+  margin-right: -20px;
+  width: calc(100% + 40px);
+}
+
+/* Ensure profile picture stays behind header */
+.profile-page {
+  position: relative;
+  z-index: 1;
+}
+
+.profile-page > div:first-child {
+  position: relative;
+  z-index: 1;
+}
