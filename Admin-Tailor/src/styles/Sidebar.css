@@ -1,0 +1,226 @@
+/* Pastel Sidebar Styles */
+:root {
+  --primary-gradient: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 50%, #81d4fa 100%);
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(59, 130, 246, 0.2);
+  --text-primary: #1e293b;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --accent-color: #3b82f6;
+  --shadow-glow: 0 4px 20px rgba(59, 130, 246, 0.15);
+  --shadow-strong: 0 8px 30px rgba(59, 130, 246, 0.25);
+}
+
+.sidebar {
+  width: clamp(200px, 20vw, 250px);
+  background: linear-gradient(180deg, #f0f9ff 0%, #e0f2fe 50%, #dbeafe 100%);
+  backdrop-filter: blur(20px);
+  border-right: 1px solid var(--glass-border);
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-glow);
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  overflow-y: auto;
+  /* Hide scrollbar while preserving scroll */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar-header {
+  padding: clamp(8px, 2vw, 10px);
+  text-align: center;
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-image {
+  width: clamp(60px, 8vw, 100px);
+  height: clamp(40px, 6vw, 60px);
+  margin-bottom: clamp(6px, 1.5vw, 10px);
+  object-fit: contain;
+}
+
+.logo h2 {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: clamp(15px, 2.6vw, 21px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-family: 'Poppins', sans-serif;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: clamp(15px, 3vw, 20px) 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: clamp(12px, 2.5vw, 16px) clamp(15px, 3vw, 20px);
+  text-decoration: none;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  border-left: 3px solid transparent;
+  font-size: clamp(14px, 1.9vw, 16px);
+  font-weight: 500;
+  margin: 2px 0;
+  border-radius: 0 8px 8px 0;
+  position: relative;
+  font-family: 'Lato', sans-serif;
+  letter-spacing: 0.01em;
+}
+
+.nav-item:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--accent-color);
+  transform: translateX(4px);
+  border-left-color: var(--accent-color);
+}
+
+.nav-item.active {
+  background: var(--accent-gradient);
+  color: var(--accent-color);
+  border-left-color: var(--accent-color);
+  font-weight: 600;
+  box-shadow: var(--shadow-glow);
+}
+
+.nav-icon {
+  margin-right: clamp(8px, 1.5vw, 12px);
+  font-size: clamp(12px, 2vw, 16px);
+  width: clamp(16px, 2.5vw, 20px);
+  text-align: center;
+}
+
+.nav-text {
+  font-weight: 500;
+  font-size: clamp(11px, 1.6vw, 14px);
+}
+
+/* Mobile Menu Toggle */
+.mobile-menu-toggle {
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1001;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  box-shadow: var(--shadow-glow);
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.mobile-menu-toggle:hover {
+  background: var(--accent-color);
+  transform: scale(1.05);
+  box-shadow: var(--shadow-strong);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 250px;
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .mobile-menu-toggle {
+    display: block;
+  }
+  
+  .main-content {
+    margin-left: 0;
+  }
+  
+  .sidebar-header {
+    padding: 15px 10px;
+  }
+  
+  .logo-image {
+    width: 80px;
+    height: 50px;
+  }
+  
+  .logo h2 {
+    font-size: 18px;
+  }
+  
+  .nav-item {
+    padding: 12px 15px;
+    font-size: 14px;
+  }
+  
+  .nav-icon {
+    font-size: 16px;
+    margin-right: 10px;
+  }
+  
+  .nav-text {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 220px;
+  }
+  
+  .sidebar-header {
+    padding: 12px 8px;
+  }
+  
+  .logo-image {
+    width: 70px;
+    height: 45px;
+  }
+  
+  .logo h2 {
+    font-size: 16px;
+  }
+  
+  .nav-item {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  .nav-icon {
+    font-size: 14px;
+    margin-right: 8px;
+  }
+  
+  .nav-text {
+    font-size: 13px;
+  }
+  
+  .mobile-menu-toggle {
+    top: 8px;
+    left: 8px;
+    padding: 6px;
+    font-size: 14px;
+  }
+}
