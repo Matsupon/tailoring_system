@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auth Test</title>
+</head>
+<body>
+    <h1>Authentication Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        const API_BASE = '/api';
+        
+        async function testAuth() {
+            const results = document.getElementById('results');
+            results.innerHTML = '<p>Testing authentication...</p>';
+            
+            try {
+                // Get token from localStorage
+                const token = localStorage.getItem('adminToken');
+                if (!token) {
+                    results.innerHTML += '<p style="color: red;">❌ No admin token found in localStorage</p>';
+                    return;
+                }
+                
+                results.innerHTML += `<p>✅ Found token: ${token.substring(0, 20)}...</p>`;
+                
+                // Test debug token endpoint first
+                const tokenResponse = await fetch(`${API_BASE}/debug-token`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const tokenData = await tokenResponse.json();
+                results.innerHTML += `<h3>Token Debug:</h3><pre>${JSON.stringify(tokenData, null, 2)}</pre>`;
+                
+                // Test simple auth endpoint
+                const simpleAuthResponse = await fetch(`${API_BASE}/test-simple-auth`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (simpleAuthResponse.ok) {
+                    const simpleAuthData = await simpleAuthResponse.json();
+                    results.innerHTML += `<p style="color: green;">✅ Simple auth test passed: ${JSON.stringify(simpleAuthData, null, 2)}</p>`;
+                } else {
+                    const errorData = await simpleAuthResponse.text();
+                    results.innerHTML += `<p style="color: red;">❌ Simple auth test failed (${simpleAuthResponse.status}): ${errorData}</p>`;
+                }
+                
+                // Test appointments with simple auth
+                const appointmentsSimpleResponse = await fetch(`${API_BASE}/appointments-simple`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (appointmentsSimpleResponse.ok) {
+                    const appointmentsSimpleData = await appointmentsSimpleResponse.json();
+                    results.innerHTML += `<p style="color: green;">✅ Appointments simple endpoint works!</p>`;
+                } else {
+                    const errorData = await appointmentsSimpleResponse.text();
+                    results.innerHTML += `<p style="color: red;">❌ Appointments simple endpoint failed (${appointmentsSimpleResponse.status}): ${errorData}</p>`;
+                }
+                
+                // Test custom auth endpoint
+                const customAuthResponse = await fetch(`${API_BASE}/test-custom-auth`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (customAuthResponse.ok) {
+                    const customAuthData = await customAuthResponse.json();
+                    results.innerHTML += `<p style="color: green;">✅ Custom auth test passed: ${JSON.stringify(customAuthData, null, 2)}</p>`;
+                } else {
+                    const errorData = await customAuthResponse.text();
+                    results.innerHTML += `<p style="color: red;">❌ Custom auth test failed (${customAuthResponse.status}): ${errorData}</p>`;
+                }
+                
+                // Test debug endpoint first
+                const debugResponse = await fetch(`${API_BASE}/debug-auth`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                const debugData = await debugResponse.json();
+                results.innerHTML += `<p>Debug info: ${JSON.stringify(debugData, null, 2)}</p>`;
+                
+                // Test authenticated endpoint
+                const authResponse = await fetch(`${API_BASE}/test-auth`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (authResponse.ok) {
+                    const authData = await authResponse.json();
+                    results.innerHTML += `<p style="color: green;">✅ Auth test passed: ${JSON.stringify(authData, null, 2)}</p>`;
+                } else {
+                    const errorData = await authResponse.text();
+                    results.innerHTML += `<p style="color: red;">❌ Auth test failed (${authResponse.status}): ${errorData}</p>`;
+                }
+                
+                // Test appointments endpoint
+                const appointmentsResponse = await fetch(`${API_BASE}/appointments`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                if (appointmentsResponse.ok) {
+                    const appointmentsData = await appointmentsResponse.json();
+                    results.innerHTML += `<p style="color: green;">✅ Appointments endpoint works!</p>`;
+                } else {
+                    const errorData = await appointmentsResponse.text();
+                    results.innerHTML += `<p style="color: red;">❌ Appointments endpoint failed (${appointmentsResponse.status}): ${errorData}</p>`;
+                }
+                
+            } catch (error) {
+                results.innerHTML += `<p style="color: red;">❌ Error: ${error.message}</p>`;
+            }
+        }
+        
+        // Run test when page loads
+        testAuth();
+    </script>
+</body>
+</html>

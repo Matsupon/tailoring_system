@@ -24,6 +24,7 @@ const Login = () => {
       });
 
       if (response.data.token) {
+        console.log("SAVING TOKEN:", response.data.token);
         localStorage.setItem('adminToken', response.data.token);
         localStorage.setItem('adminData', JSON.stringify({
           email: response.data.admin.email,

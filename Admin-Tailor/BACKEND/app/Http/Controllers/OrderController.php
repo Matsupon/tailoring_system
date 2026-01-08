@@ -172,6 +172,10 @@ class OrderController extends Controller
     {
         $orders = Order::with(['appointment.user', 'feedback'])
             ->where('status', 'Finished')
+            ->whereHas('appointment', function($q) {
+                // Exclude orders whose appointments have been refunded
+                $q->whereNull('refund_image');
+            })
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($order) {

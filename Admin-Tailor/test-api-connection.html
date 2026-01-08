@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Connection Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .result { margin: 20px 0; padding: 15px; border-radius: 5px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        button { padding: 10px 20px; margin: 10px 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Admin-Tailor API Connection Test</h1>
+    <p>Testing connection to: <strong>http://192.168.10.87:8000/api</strong></p>
+    
+    <button onclick="testConnection()">Test Basic Connection</button>
+    <button onclick="testAuth()">Test Authentication</button>
+    
+    <div id="results"></div>
+
+    <script>
+        const API_BASE = 'http://192.168.10.87:8000/api';
+        
+        function showResult(message, isSuccess = true) {
+            const results = document.getElementById('results');
+            const div = document.createElement('div');
+            div.className = `result ${isSuccess ? 'success' : 'error'}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong>: ${message}`;
+            results.appendChild(div);
+        }
+        
+        async function testConnection() {
+            try {
+                const response = await fetch(`${API_BASE}/test`);
+                const data = await response.json();
+                showResult(`✅ Connection successful! Response: ${JSON.stringify(data)}`);
+            } catch (error) {
+                showResult(`❌ Connection failed: ${error.message}`, false);
+            }
+        }
+        
+        async function testAuth() {
+            const token = localStorage.getItem('adminToken') || localStorage.getItem('authToken');
+            if (!token) {
+                showResult('❌ No authentication token found. Please login first.', false);
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/test-auth`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                showResult(`✅ Authentication successful! Response: ${JSON.stringify(data)}`);
+            } catch (error) {
+                showResult(`❌ Authentication failed: ${error.message}`, false);
+            }
+        }
+    </script>
+</body>
+</html>
